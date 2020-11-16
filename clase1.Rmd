@@ -1,0 +1,839 @@
+---
+title: "clase1 Introducción a R"
+author: "Sergio Fernández"
+date: "11/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Motivación 15 min
+
+2. Instalación de R y Rstudio 5 - 10 min
+
+3. Trabajar con R en terminal 15 min
+instalación de paquetes
+
+4. Rstudio 20 min
+
+
+
+Github y como vamos a trabajar
+
+
+# 1. Creación de objetos 
+
+Cuando programamos básicamente estamos almacenando datos. Estos datos puede ser externos (usted manualmente introduce datos) o  pueden ser respuestas de instrucciones que le dimos al computador y que este ya ejecutó. 
+
+La forma de alamacenar estos datos en R es mediante la creación de **objetos**, que básicamente son lugares en la memoria de nuestro computador a los cuáles accedemos mediante un *nombre*
+
+Supongamos que queremos decirle a nuestro computador que realice la suma `10 + 1`. Primero necesitamos almacenar el cada unos los elementos de la suma en la memoria.
+
+Para esto vamos a almacenar el `10` en la memoria mediante un objeto
+
+En R se utiliza el operador especial `<-` como sigue:
+
+```{r}
+primer_elemento <-10
+
+```
+
+En este caso `10` es el **valor** del **objeto** y `primer_objeto` es el **nombre** del objeto.
+
+> En R la sintaxis para crear un objeto es **nombre** `<-` **value**
+
+Creemos nuestro segundo objeto:
+
+```{r}
+segundo_elemento <- 1
+```
+
+
+En Rstudio podemos ver como se vab guardando los objetos en la memoria en el panel superior derecho, en la pestaña de environment: 
+
+![imagen1](imagenes/im1.png)
+
+
+> Observe la palabra **environment**. Esto es un lugar en la memoria que R reserva almacenar lo que ocupa para lograr correr el código que le estamos dando: objetos que creamos y paquetes. Más adelante veremos que podemos crear varios environments.
+
+>Observe la pestaña *list*. Haga click y cambiélo por *Grid*. Esto nos da más información sobre los objetos en el **environment** y nos permite usar la *escoba* para borrar elementos individuales.
+
+
+Ahora usemos estos dos objetos para crear la suma. Le vamos a decir a R que almacene el valor de la suma en un objeto con el nombre `elemento_suma`:
+
+```{r}
+elemento_suma <- primer_elemento + segundo_elemento
+```
+
+
+Ahora digamosle que nos muestre el resultado en la **consola**
+
+Esto lo hacemos con la función `print`
+
+```{r}
+print(elemento_suma)
+```
+
+
+Esto lo podemos hacer también simplemente ejecutando `elemento_suma`, ya sea en la consola o  en un script:
+
+```{r}
+elemento_suma
+```
+
+
+>Algo importante de entender es que cada vez que estamos ejecutamos ![run](imagenes/im2.png) estamos diciéndole a Rstudio que tome este pedazo de código y lo mande a la consola.
+
+
+**Ejercicios 1**
+Usando un Rscript que llamará clase1_ejercicios con la extensión.
+- Cree dos objetos con los nombres `x` y `y` que almacenen los valores `15` y `10`. Luego - Cree un objeto que sea la suma de `x` y `y` en otros objeto llamado `suma`
+- Ejecute el archivo 
+- imprima `x` + 1 (sin guardarlo)
+- cree un objeto que se llame `mult` que será $$x*y$$
+- cree un objeto que se llame `potencia` que será $$x^2$$ (use `^` que significa 'elevar x a la ??')
+- - cree un objeto que se llame `div` que será $$x/y$$
+
+### Nombres de variables:
+
+Algunas reglas:
+- No podemos empezar un nombre con:
+  - Números
+  - Símbolo `_`
+- No podemos usar palabras reservadas como nombres:
+  - `function`, `for`, `if`
+- No poremos usar los siguienres símbolos:
+   - ![](imagenes/im3.png)
+   
+   
+Lo ideal es escribir una palabra o varias palarbas unidas por `_` que sean indicativos del objeto. Preferir nombres cortos e ilustrativos.
+
+Ejemplos: `suma`, `canton`, `cantones_unicos`, `suma_acumulada`, `x`, `x1`, `imagen_2`, `imagen2`
+
+
+## 2. Funciones: primer vistazo:
+
+Las funciones son comandos que nos permiten transformar uno o más objetos en R en un nuevo objeto.
+
+Por ejemplo la suma de dos objetos:
+
+```{r}
+x <- 100
+y <- 50
+
+sum_xy <- sum(x, y)
+```
+
+La función redondeo
+
+```{r}
+x <- 2.439373
+x_rounded <- round(x, 2)
+x_rounded
+```
+
+logaritmos
+
+```{r}
+x = 10
+log_n <- log(x)
+log_n
+
+```
+
+## 3. Tipos de datos
+
+Los tipos de datos de uso más común son:
+
+#### Numéricos
+
+ **números enteros(integers)**
+
+```{r}
+
+x <- 3L
+x
+```
+
+podemos verificar el tipo de dato con la función `typeof`:
+
+```{r}
+typeof(x)
+```
+
+**decimales(doubles)**
+
+```{r}
+x <- 2.567393
+print(x)
+print(typeof(x))
+```
+
+Si queremos que sean número enteros debemos especificarlo con una `L` acompañando el número cuando creamos el objeto, de lo contrario todos lo números se guardan como double:
+
+```{r}
+x <- 3
+print(typeof(x))
+y <- 3L
+print(typeof(y))
+```
+
+Como vimos antes podemos realizar varias operaciones con estos objetos como sumar, restar, multiplicar, dividir o usar funciones más complejas
+
+**Strings**
+
+Son hileras de caracteres de diferentes longitudes
+
+```{r}
+string1 <- 'a'
+string1
+```
+
+
+```{r}
+string2 <- 'A'
+```
+
+
+```{r}
+string3 <- 'mi nombres es'
+```
+
+
+```{r}
+nombre <- 'José'
+apellido <-  'Araya'
+```
+
+Con los strings podemos realizar varias operaciones como:
+
+```{r}
+concatenado <- paste(string3, nombre, apellido, sep = ' ')
+concatenado
+```
+
+```{r}
+typeof(concatenado)
+```
+
+
+Podemos extrar partes de un string:
+Para esto vamos a utilizar la librería `stringr`
+
+```{r}
+library(stringr)
+```
+
+
+```{r}
+str_sub(string = concatenado, start = 1, end = 4)
+```
+
+Podemos pasar todo el string a mayusculas
+
+```{r}
+str_to_lower(concatenado)
+```
+
+Podemos poner el string como si fuera un título 
+
+```{r}
+str_to_title(concatenado)
+```
+
+Existen muchas otras funciones para manejar textos que iremos viendo más adelante
+
+**lógicos o boleanos**
+
+Son tipos de datos que solamente toman dos valores `TRUE` o `False`.
+
+En análisis de datos es muy frecuente que queramos tomar subconjuntos de datos que cumplan ciertos valores, por ejemplo tomar todas las personas cuya edad sea mayor a 90 años. Para este tipo de tareas nos serán muy útilies
+
+```{r}
+x <- TRUE
+y <- FALSE
+
+x
+y
+```
+
+Si queremos evaluar si algo es falso o verdadero usamos las expresiones `==`, `>`, `>=`, `<=`, `<`
+
+```{r}
+x <- 3
+y <- 3
+z <- 5
+```
+
+```{r}
+x==y
+x==z
+x==33
+x==3
+x==z-2
+```
+
+Una un poco más compleja con strings
+
+```{r}
+str_length(concatenado)
+```
+
+
+```{r}
+str_length(concatenado) >= 10
+
+```
+
+Podemos evaluar expresiones más complejas usando dos operadores lógicos
+
+- `&` (and)
+
+Queremos saber si dos o más exmpresiones se cumplen a la vez:
+
+```{r}
+x <- 10
+y <- 15
+z <- -30
+
+# Expresion 1
+x >= 0 & y >=0
+
+# Expresion 2
+
+z< 0 & y>0
+
+#Expresion 3
+
+x > 0 & z > 0
+
+
+```
+
+
+Podemos guardar estas expresiones como objetos
+
+```{r}
+expresion <- x > 0 & z > 0
+expresion
+```
+
+
+Podemos verificar los tipos de datos con funciones que nos van a devolver un boleano
+
+```{r}
+x <- 3
+x2 <- 3L
+y <- 'New York'
+z <- x == 3
+```
+
+```{r}
+is.integer(x)
+is.integer(x2)
+is.character(x)
+is.character(y)
+is.double(x)
+is.double(x2)
+is.logical(z)
+is.logical(x)
+typeof(x) == "double"
+```
+
+**Ejercicio**
+De las expresiones anteriores
+- a) Evalue si las dos primeras son 'integer'
+- b) Evalue si las primera es 'integer' y la segunda es 'double'
+- Guarde a) y b) en un objeto llamado expresion2. Que tipo de objeto es?
+
+
+## Estructuras de datos
+
+Una estructura de datos es un objeto que nos permite almacenar más de un dato en la memoria con un mismo nombres. Imagine que necesitamos almacenar una lista de productos vendidos en un día con su respectiva cantidad. Como hacemos para almacenar estos datos?
+
+Para guardar esta información adecuadamente necesitamos primero conocer las estructuras de datos más básicas.
+
+En R las estructuras de datos se pueden clasificar por dos criterios:
+- Dimensionalidad: 
+- Heterogeneidad: existen estructuras para almacenar solo un tipo de datos o diferentes tipos:
+   
+```{r, echo = FALSE}
+estructuras_datos <-  data.frame(Homogenas = c('Vector Atomico', 'Matriz', 'Array'), Heterogeneas = c('Lista', 'Data Frames', ''), row.names = c('Dimension 2', 'Dimension 1', 'Dimension n'))
+
+knitr::kable(estructuras_datos)
+
+```
+   
+
+### Una dimensión
+
+#### Vectores
+
+Es un conjunto no ordenado de un solo tipo de dato. Cada elemento del vector tiene un índice que los indentifica y es como lo podemos extraer del vector.
+Los vectores son la estructura de datos más básica en R.
+
+**Todos los objetos en un vector tienen el mismo tipo dato**
+
+Los vectores se crean como los objetos que se guardan como
+
+```{r}
+c(1, 2, 20)
+```
+
+Como cualquier objeto debemos asignarle un nombre para guardarlos en memoria
+
+```{r}
+x <- c(1, 2, 20)
+```
+
+Algunos ejemplos:
+
+```{r}
+strings <- c("arbol", "casa", "persona")
+logico <- c(TRUE, TRUE, FALSE, FALSE, str_length(concatenado) == 25)
+
+strings
+logico
+
+```
+
+```{r}
+string_forzado <- c(1, 'casa')
+string_forzado
+```
+
+> Esto se llama casteo y los veremos más adelante: Es básicamente cuando pasamos un tipo de datos a otro. Recordemos que un vector solo puede tener un tipo de dato, entonces R toma ciertas decisiones por nosotros para que esto se cumpla.
+
+
+Los vectores tienen 3 propiedades básicos:
+
+- Tipo
+
+```{r}
+typeof(strings)
+```
+
+```{r}
+is.character(strings)
+```
+
+En general podemos usar todas las funciones que vimos antes para evaluar tipos de objetos pero aplicadas a vectores
+
+```{r}
+
+```
+
+- Largo 
+
+```{r}
+length(strings)
+```
+
+
+
+- Nombres 
+
+```{r}
+direccion <- c('San José', 'Central', 'El Carmen')  
+nombres <-  c('Provincia', 'Canton', 'Distrito')
+names(direccion) <- nombres
+
+direccion
+```
+
+**Nota**
+```{r}
+attr(direccion, 'names')
+```
+
+#### Como accedemos a los elementos de un vector?
+
+Usamos `x[indice]` para obtener el elemento en la posición `indice` del vector `x`
+
+```{r}
+x
+```
+
+```{r}
+x[1]
+x[3]
+#Ultimo elemento
+x[length(x)]
+```
+
+
+```{r}
+direccion[c(1, 3)]
+```
+
+```{r}
+direccion[-1]
+```
+
+Usando proposiciones logicas
+
+```{r}
+direccion[c(TRUE, TRUE, FALSE, FALSE, TRUE)]
+```
+
+```{r}
+x[x>6]
+```
+
+
+
+**Ejercicios**
+
+- Cree un una secuencia de enteros negativos del -101 al - 200 usando la notación `:`
+- Extraiga el último elemento usando `length`
+- Extraiga el elemento del centro usando `lenght`
+
+
+
+### Coercion o Casteo
+
+Significa pasar un objeto de un tipo a otro
+
+```{r}
+as.character(1)
+as.logical(1)
+as.numeric(FALSE)
+
+```
+
+
+```{r}
+as.numeric('Pepe')
+```
+
+>Na es un tipo de dato especial en R donde se almacenan valores no disponibles (Not available). Pueden ser no disponible porque no se lograron generar, venían en blanco en la base de datos.
+
+<br>
+<br>
+
+<center>**Funciones para pasar castear de un tipo de dato a otro**</center>
+
+![](imagenes/im4.png)
+
+
+
+<br>
+<br>
+
+Como los vectores en R solamente pueden almacenar un tipo de datos, si tenemos más de un tipo de dato R fuerza la coerción a alguno de los tipos de datos. En algunos casos podemos obtener `NA`
+
+**Ejercicio**
+Descubra como R transforma cada uno de los tipos de datos hacia otro tipo, por ejemplo de string a entero.
+
+#### Listas
+
+Las listas relajan el requisito de los vectores donde solo podemos almacenar objetos del mismo tipo de dato. 
+
+```{r}
+x <- list(1:3, "a", c(TRUE, FALSE, TRUE), c(2.3, 5.9))
+```
+
+
+con la función `str` (structure) para ver una vista de la estructura de la lista
+
+```{r}
+str(x)
+```
+
+
+Igual que los vectores, sus elementos pueden ser identificados con nombres
+
+```{r}
+nombres <- c('numeros', 'string', 'boleano', 'vector') 
+names(x) <- nombres
+```
+
+
+Veamos ahora la estructura
+
+```{r}
+str(x)
+```
+
+
+Como accedemos a los elementos de la lista. En este caso si usamos la notación `[]`
+
+```{r}
+x[1]
+```
+
+Estamos obteniendo el primer elemento de la lista con su respectivo nombre
+
+Pero si usamos `[[]]`
+
+```{r}
+x[[1]]
+```
+
+
+Así podemos acceder además a un elemento de este vector
+
+```{r}
+x[[1]][2]
+```
+
+
+Accedemos de una vez al elemento
+
+```{r}
+x[[2]]
+```
+
+En las listas podemos almacenar todo tipo de objetos:
+
+```{r}
+list1 <- list(100:130, "R", list(TRUE, FALSE))
+```
+
+
+Este es un ejemplo de una lista **recursiva**. 
+
+Como accedemos a una lista dentro de una lista??
+
+```{r}
+list1[[3]]
+```
+
+```{r}
+list1[[3]][2]
+```
+
+Borremos este elemento
+
+```{r}
+list1[[3]] <- list1[[3]][-1]
+list1
+```
+
+
+Como podemos borrar la lista dentro de la lista?
+
+```{r}
+list1 <- list1[-3] 
+```
+
+```{r}
+list1
+```
+
+Modificar elementos dentro de una lista
+
+```{r}
+vector1  <- c(10, 21, 54, 124)
+string1  <- "Curso"
+boleano1 <- FALSE
+entero1 <- 3L
+
+x <- list(vector = vector1, hilera = string1, logico = boleano1, numerillo = entero1)
+x
+```
+
+```{r}
+x[["logico"]] <- TRUE
+x
+```
+Que pasó con x?
+
+**Ejercicio**
+
+- A) Cree una lista que contenga dos elementos, que serán cada de las listas anteriores. Use la función str para ver la estructura de la lista. Debería obtener algo similar a 
+
+```{r}
+lista_n <- list(x, list)
+str(lista_n)
+```
+
+
+- B) Acceda al primer elemento de esta lista (que será la primera lista dentro de la lista).
+- C) En elemento al que accedió en B), obtenga un elemento acceda al primer vector.
+Debería obtener algo como:
+
+```{r}
+lista_n <- list
+```
+
+
+### Dos dimensiones
+
+#### Matrices
+
+Son arreglos horizontales de vectores del mismo tipo de dato
+
+```{r}
+x <- c(1, 2, 4, 5, 6)
+y <- c(3, 4, 6, 7, 8)
+matrix(x, y)
+```
+
+Las veremos con más detalle más adelante
+
+#### Data Frames
+
+Son como matrices, pero en estas si podemos guardar vectores de distintos tipos: como si fueran columnas de una hoja de excel
+
+
+Los data frame se usan para almacenar datos en forma de tablas (filas / columnas), como estamos habituados en Excel, Spss, etc.
+
+Los data frame pueden almacenar objetos/datos de distinto tipo: numéricos, carácter, pero las columnas deben tener el mismo tipo. Esto es por que las columnas serán vectores y el dataFrame es una lista de vectores, eso si cada vector o columna deebe tener la misma longitud
+
+Aunque normalmente los data frame los creamos al cargar/leer una base de datos, vamos crear una data frame para ver su estructura.
+
+```{r}
+x <- data.frame(Titulacion = c("Economía", "ADE", "Sociología", "Magisterio"), 
+                Edad = c(25, 27, 25, 24))
+```
+
+```{r}
+class(x)
+```
+
+
+```{r}
+nrow(x)
+```
+
+
+```{r}
+ncol(x)
+```
+
+
+
+Como acceder a los elementos de un dataframe
+
+Columnas
+
+```{r}
+x[, "Titulacion"]
+```
+
+```{r}
+x[1]
+```
+
+filas 
+
+```{r}
+x[2, ]
+```
+
+como eliminar una columna
+
+Dos opciones
+
+```{r}
+x1 <- x
+x1 <- x1[-1]
+x1
+```
+
+
+```{r}
+x2 <- x
+x2[1] <- NULL
+x2
+```
+
+
+
+Ejercicio
+
+
+### Multiples dimensiones
+
+No los veremos en este curso
+
+## Más sobre Funciones 
+
+### Funciones para crear vectores
+
+- secuencia
+
+```{r}
+seq(1, 100)
+```
+
+
+- Crea vectores de números consecutivos
+```{r}
+1:100
+```
+
+
+```{r}
+seq(from = 0,to = 100, by =10)
+```
+
+
+- una muestra desde una distribución normal
+
+```{r}
+normal <- rnorm(mean = 10, sd = 1000, n = 400)
+normal
+```
+
+
+-repeticion
+
+```{r}
+rep("y", 25)
+```
+
+### Funciones que aplican sobre vectores (Vectorización)
+
+```{r}
+mean(normal)
+```
+
+```{r}
+var(normal)
+```
+
+```{r}
+log(normal)
+```
+¨
+Que tiene de diferente está última función?
+
+#### Ejercicios adicionales
+
+**Vectores:**
+Cree un vector de provincias de Costa Rica:
+
+Acceda a las primeras 3 provincias
+
+Acceda a la primera y 6 elementos
+
+Acceda a la última provincia usando lenght() y no el número 7
+
+Haga una repeticion de 5 elementos usando la función rep
+
+Cree un vector de año desde el 2015 hasta el 2019
+
+Haga una repeticion de 7
+
+Ordénelo en forma ascendente
+
+
+**Listas**
+
+Cree una lista con los el vector de provincias_rep y el vector de ano_ord, sin ponerle nombre a los elementos de la lista
+
+Acceda al vector de años con la notacion [[]]
+
+Acceda al primer elemento del primer año
+
+Acceda al primer elemento del año 2018
+
+Acceda a los primeros 3 elementos del año 2017
+
+Ahora, cree la misma lista pero con nombres en sus elementos
+
+Repita los mismos ejericios que se hicieron con la lista sin nombre
