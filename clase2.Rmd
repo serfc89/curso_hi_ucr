@@ -1,0 +1,989 @@
+---
+title: "Clase 2 Introducción a R"
+author: "Sergio Fernández"
+date: "11/23/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    css: styles.css
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Clase anterior
+
+### librerias 
+
+
+`install.packages`
+
+Vamos a utilizar mayormente la siguiente librería:
+
+[tidyverse](https://www.tidyverse.org/)
+
+<center>![](imagenes/img12.png){width=50%}</center>
+
+
+### Strings
+
+Son hileras de caracteres de diferentes longitudes
+
+```{r}
+string1 <- 'a'
+string1
+```
+
+
+```{r}
+string2 <- 'A'
+```
+
+
+```{r}
+string3 <- 'mi nombres es'
+```
+
+
+```{r}
+nombre <- 'José'
+apellido <-  'Araya'
+```
+
+Con los strings podemos realizar varias operaciones como:
+
+```{r}
+concatenado <- paste(string3, nombre, apellido, sep = ' ')
+concatenado
+```
+
+```{r}
+typeof(concatenado)
+```
+
+
+Podemos extrar partes de un string:
+Para esto vamos a utilizar la librería `stringr`
+
+```{r}
+library(stringr)
+```
+
+
+```{r}
+str_sub(string = concatenado, start = 1, end = 4)
+```
+
+Podemos pasar todo el string a mayusculas
+
+```{r}
+str_to_lower(concatenado)
+```
+
+Podemos poner el string como si fuera un título 
+
+```{r}
+str_to_title(concatenado)
+```
+
+Existen muchas otras funciones para manejar textos que iremos viendo más adelante
+
+```{r}
+concatenado
+concantenado <- str_replace(string = concatenado, 'nombres', 'nombre')
+concantenado
+
+
+```
+
+___
+___
+
+
+## Qué es un documento o archivo Rmarkdown
+
+Es tipo de archiv que permite escribir y correr código en R, al mismo tiempo podemos incluiir y formatear texto plano, incluir imágenes, links, crear presentaciones y más.
+
+Su principal utilidad es que nos permitirá automatizar reportes en varios formatos: *Word, pdf, power point, html (más adelante veremos que esto último)*.
+
+**Markdown** es una especie de lenguaje de programación que funciona para escribir texto en un formato que luego puede ser leígo por una página web. No es nada más que una forma especial de escribir texto solo que con algunas *claves* o código especiales para darle format a lo que escribimos.
+
+Por ejemplo si quisiereamos escribir la oración 'Me gusta comer naranjas',  pondríamos antes y después de la oración estos dos caracteres:`**`
+
+Algo así `**Me gusta comer naranjas**`
+
+Si esto lo escribimos en un archivo que sepa leer ese lenguaje **Markdown** el resultado se vería como: 
+
+**Me gusta comer naranjas**
+
+Precisamente **Rmarkdown** es un tipo de archivo que soporta tanto **Markdown** como **R**
+lo que nos permite escribir texto y código al mismo tiempo, a la vez que podemos obtener un documento para visualizar el resultado final.
+
+### Como lo usamos:
+
+- 1. Abrimos un archivo **Rmarkdown**
+
+![](imagenes/img8.png){ width=30% }
+
+- 2. Para escribir texto, se escribe forma normal
+
+![](imagenes/img9.png){ width=50% }
+
+Para dar formato usamos **Markdown**. Aquí puede el código [Rmarkdown Cheatsheet](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-spanish.pdf)
+
+- Para escribir código de R tenemos dos opciones:
+  - chunks: 
+  
+![](imagenes/img10.png){ width=60% }
+
+Podemos usar el shortcut `Ctrl+Alt+I` para insertar un nuevo chunk
+
+  
+  - in-line code:
+  
+  Se utiliza ``r`` y lo que nos permite es inserta código en los párrafos que estamos escribiendo:
+
+### Cómo funciona por detrás?
+
+No es necesario entender esto para usarlo, pero da una buena intución para su uso:
+
+![](imagenes/img07.png)
+
+
+
+
+
+
+
+## Estructuras de datos
+
+Una estructura de datos es un objeto que nos permite almacenar más de un dato en la memoria con un mismo nombres. Imagine que necesitamos almacenar una lista de productos vendidos en un día con su respectiva cantidad. Como hacemos para almacenar estos datos?
+
+Para guardar esta información adecuadamente necesitamos primero conocer las estructuras de datos más básicas.
+
+En R las estructuras de datos se pueden clasificar por dos criterios:
+- Dimensionalidad: 
+- Heterogeneidad: existen estructuras para almacenar solo un tipo de datos o diferentes tipos:
+   
+```{r, echo = FALSE}
+estructuras_datos <-  data.frame(Homogenas = c('Vector Atomico', 'Matriz', 'Array'), Heterogeneas = c('Lista', 'Data Frames', ''), row.names = c('Dimension 2', 'Dimension 1', 'Dimension n'))
+
+knitr::kable(estructuras_datos)
+
+```
+   
+
+## Una dimensión
+
+### Vectores
+
+Es un conjunto no ordenado de un solo tipo de dato. Cada elemento del vector tiene un índice que los indentifica y es como lo podemos extraer del vector.
+Los vectores son la estructura de datos más básica en R.
+
+**Todos los objetos en un vector tienen el mismo tipo dato**
+
+Los vectores se crean como los objetos que se guardan como
+
+```{r}
+c(1, 2, 20)
+```
+
+#### Crear
+
+Como cualquier objeto debemos asignarle un nombre para guardarlos en memoria
+
+```{r}
+x <- c(1, 2, 20)
+y <- c(5, 6, 7)
+```
+
+Podemos operarlos
+
+```{r}
+z <-  x+y
+```
+
+
+Algunos ejemplos:
+
+```{r}
+strings <- c("arbol", "casa", "persona")
+logico <- c(TRUE, TRUE, FALSE, FALSE, str_length(concatenado) == 25)
+
+strings
+logico
+
+```
+
+R nos da un mensaje de aviso (warning), no es lo mismo que un error. Nos avisa que hay algo que no cuadra pero…realiza la operación que nosotros queremos.
+
+Una cuestión muy importante que siempre tenemos que tener en cuenta cuando trabajamos con vectores es que en un vector sólo podemos almacenar elementos del mismo tipo. ¿Qué tipos/clases de elementos (o datos) tenemos en R?
+
+Los que hemos visto hasta ahora:
+
+- Carácter
+- Numéricos
+- Enteros
+- Complejos
+- Lógicos
+
+
+
+
+
+```{r}
+string_forzado <- c(1, 'casa')
+string_forzado
+```
+
+> Esto se llama casteo y los veremos más adelante: Es básicamente cuando pasamos un tipo de datos a otro. Recordemos que un vector solo puede tener un tipo de dato, entonces R toma ciertas decisiones por nosotros para que esto se cumpla.
+
+
+Los vectores tienen 3 propiedades básicos:
+
+- Tipo
+
+```{r}
+typeof(strings)
+class(strings)
+```
+
+```{r}
+is.character(strings)
+```
+
+En general podemos usar todas las funciones que vimos antes para evaluar tipos de objetos pero aplicadas a vectores
+
+```{r}
+
+```
+
+- Largo 
+
+```{r}
+length(strings)
+```
+
+
+
+- Nombres 
+
+```{r}
+direccion <- c('San José', 'Central', 'El Carmen')  
+nombres <-  c('Provincia', 'Canton', 'Distrito')
+names(direccion) <- nombres
+
+direccion
+```
+
+**Nota**
+```{r}
+attr(direccion, 'names')
+```
+
+#### Acceder elementos de vector?
+
+Usamos `x[indice]` para obtener el elemento en la posición `indice` del vector `x`
+
+```{r}
+x
+```
+
+```{r}
+x[1]
+x[3]
+#Ultimo elemento
+x[length(x)]
+```
+
+
+```{r}
+direccion[c(1, 3)]
+```
+
+```{r}
+direccion[-1]
+```
+
+Usando proposiciones logicas
+
+```{r}
+direccion[c(TRUE, TRUE, FALSE, FALSE, TRUE)]
+```
+
+```{r}
+x[x>6]
+```
+
+
+
+**Ejercicios**
+
+- Cree un una secuencia de enteros negativos del -101 al - 200 usando la notación `:`
+- Extraiga el último elemento usando `length`
+- Extraiga el elemento del centro usando `lenght`
+
+#### Ordenar elementos
+
+```{r}
+z
+sort(z, decreasing = T)
+sort(z, decreasing = F)
+```
+
+#### Borrar elementos de un vector
+
+```{r}
+z <- z[-1]
+
+```
+
+```{r}
+z <- c(2,4,6,8,20)
+z
+```
+
+```{r}
+z <- z[-c(1,2, 3)]
+z
+```
+
+
+#### Funciones para crear vectores
+
+- secuencia
+
+```{r}
+seq(1, 100)
+```
+
+
+- Crea vectores de números consecutivos
+```{r}
+1:100
+```
+
+
+```{r}
+seq(from = 0,to = 100, by =10)
+```
+
+
+```{r}
+w <- 2015:2019
+w
+```
+
+
+- una muestra desde una distribución normal
+
+```{r}
+normal <- rnorm(mean = 10, sd = 1000, n = 400)
+normal
+```
+
+
+- repetir
+
+```{r}
+rep(2015:2019, 7)
+```
+
+
+```{r}
+sort(rep(2015:2019, 7))
+```
+
+#### Coerción o Casteo
+
+Significa pasar un objeto de un tipo a otro
+
+```{r}
+as.character(1)
+as.logical(1)
+as.numeric(FALSE)
+
+```
+
+
+```{r}
+as.numeric('Pepe')
+```
+
+>Na es un tipo de dato especial en R donde se almacenan valores no disponibles (Not available). Pueden ser no disponible porque no se lograron generar, venían en blanco en la base de datos.
+
+<br>
+<br>
+
+<center>**Funciones para pasar castear de un tipo de dato a otro**</center>
+
+![](imagenes/im4.png)
+
+
+
+<br>
+<br>
+
+Como los vectores en R solamente pueden almacenar un tipo de datos, si tenemos más de un tipo de dato R fuerza la coerción a alguno de los tipos de datos. En algunos casos podemos obtener `NA`
+
+**Ejercicio**
+Descubra como R transforma cada uno de los tipos de datos hacia otro tipo, por ejemplo de string a entero.
+
+### Listas
+
+Las listas relajan el requisito de los vectores donde solo podemos almacenar objetos del mismo tipo de dato. 
+
+#### Crear
+
+```{r}
+x <- list(1:3, "a", c(TRUE, FALSE, TRUE), c(2.3, 5.9))
+```
+
+
+con la función `str` (structure) para ver una vista de la estructura de la lista
+
+```{r}
+str(x)
+```
+
+
+Igual que los vectores, sus elementos pueden ser identificados con nombres
+Para asignar nombres usamos la función `names(lista)` seguido del operads `<-` y el vector de nombres
+
+```{r}
+nombres <- c('numeros', 'string', 'boleano', 'vector') 
+names(x) <- nombres
+```
+
+
+Veamos ahora la estructura
+
+```{r}
+str(x)
+```
+
+#### Acceder a los elementos de la lista
+
+Como accedemos a los elementos de la lista. En este caso si usamos la notación `[]`
+
+```{r}
+x[1]
+```
+
+Estamos obteniendo el primer elemento de la lista con su respectivo nombre
+
+Pero si usamos `[[]]`
+
+```{r}
+x[[1]]
+```
+
+
+Así podemos acceder además a un elemento de este vector
+
+```{r}
+x[[1]][2]
+```
+
+
+Accedemos de una vez al elemento
+
+```{r}
+x[[2]]
+```
+
+También podemos usar el operador `$` como sigue
+
+```{r}
+x$numeros
+x$string
+```
+
+
+En las listas podemos almacenar todo tipo de objetos:
+
+```{r}
+list1 <- list(100:130, "R", list(TRUE, FALSE))
+```
+
+
+Este es un ejemplo de una lista **recursiva**. 
+
+Como accedemos a una lista dentro de una lista??
+
+```{r}
+list1[[3]]
+```
+
+```{r}
+list1[[3]][2]
+```
+
+#### Borrar elementos de la lista
+
+Borremos este elemento
+
+```{r}
+list1[[3]] <- list1[[3]][-1]
+list1
+```
+
+
+Como podemos borrar la lista dentro de la lista?
+
+```{r}
+list1 <- list1[-3] 
+```
+
+```{r}
+list1
+```
+
+#### Modificar elementos dentro de una lista
+
+```{r}
+vector1  <- c(10, 21, 54, 124)
+string1  <- "Curso"
+boleano1 <- FALSE
+entero1 <- 3L
+
+x <- list(vector = vector1, 
+          hilera = string1, 
+          logico = boleano1,
+          numerillo = entero1)
+x
+```
+
+```{r}
+x[["logico"]] <- TRUE
+x
+```
+Que pasó con x?
+
+**Ejercicio**
+
+- A) Cree una lista que contenga dos elementos, que serán cada de las listas anteriores: **x** y list. Use la función str para ver la estructura de la lista. Debería obtener algo similar a 
+
+```{r}
+lista_n <- list(x, list1)
+str(lista_n)
+```
+
+
+- B) Acceda al primer elemento de esta lista (que será la primera lista dentro de la lista).
+- C) En elemento al que accedió en B), acceda al elemento llamado  **vector** y cambie el primer elemento de este vector por un cero
+Debería obtener algo como:
+
+```{r eval=FALSE, include=FALSE}
+lista_n[[1]][['vector']][1]<-0
+
+```
+
+```{r}
+lista_n
+
+```
+
+## Dos dimensiones
+
+### Matrices
+
+Son arreglos horizontales de vectores del mismo tipo de dato
+
+```{r}
+x <- c(1, 2, 4, 5, 6)
+y <- c(3, 4, 6, 7, 8)
+matrix(x, y)
+```
+
+Las veremos con más detalle más adelante
+
+### Data Frames
+
+Son como matrices, pero en estas si podemos guardar vectores de distintos tipos: como si fueran columnas de una hoja de excel
+
+
+Los data frame se usan para almacenar datos en forma de tablas (filas / columnas), como estamos habituados en Excel, Spss, etc.
+
+Los data frame pueden almacenar objetos/datos de distinto tipo: numéricos, carácter, pero las columnas deben tener el mismo tipo. Esto es por que las columnas serán vectores y el dataFrame es una lista de vectores, eso si cada vector o columna deebe tener la misma longitud
+
+Aunque normalmente los data frame los creamos al cargar/leer una base de datos, vamos crear una data frame para ver su estructura.
+
+```{r}
+x <- data.frame(Titulacion = c("Economía", "ADE", "Sociología", "Magisterio"), 
+                Edad = c(25, 27, 25, 24))
+```
+
+```{r}
+class(x)
+```
+
+
+```{r}
+nrow(x)
+```
+
+
+```{r}
+ncol(x)
+```
+
+
+Como acceder a los elementos de un dataframe
+
+Columnas
+
+```{r}
+x[, "Titulacion"]
+```
+
+```{r}
+x[1]
+```
+
+filas 
+
+```{r}
+x[2, ]
+```
+
+como eliminar una columna
+
+Dos opciones
+
+```{r}
+x1 <- x
+x1 <- x1[-1]
+x1
+```
+
+
+```{r}
+x2 <- x
+x2[1] <- NULL
+x2
+```
+
+
+
+#### Importar Data Frames
+
+Pocas veces se crean los dataFrame desde cero, dado que estos se recopilan por sistemas de información o son digitados por agentes externos. Por ejemplo una hoja de excel o una base de datos son fuentes que podemos convertir un dataframe, muchas veces muy fácilmente. Empecemos con un ejemplo sencillo de como importar una hoja de excel R, el cuál lo lee como un dataFrame.
+
+Si bien podemos importar una hoja de excel mediante un comando, por ahora lo utilizaremos utilizando la opción de interfaz de usuario de Rstudio ubicada en la ventana de Environment: import Dataset, donde podremos elegir una hoja de datos en algún directorio de nuestro ordenador e importarla sin problemas.
+
+
+<center>![](imagenes/img11.png){width=60%}</center>
+
+Vamos a importar nuestro pirmer dataset que lo encontramos en [Kaggle]('https://www.kaggle.com/burak3ergun/loan-data-set?select=loan_data_set.csv')
+
+
+```{r}
+library(readr)
+credito <- read_csv("credito.csv")
+
+```
+
+
+```{r}
+readr::write_delim(x = credito, path = 'credito2.csv', delim = '/')
+```
+
+
+```{r}
+credito2 <- read_delim("credito2.csv", delim = "/", 
+    escape_double = FALSE, trim_ws = TRUE)
+```
+
+```{r}
+credito2 %>% DT::datatable()
+```
+
+#### Inspeccionar un data frame:
+
+```{r}
+str(credito)
+```
+
+```{r}
+glimpse(credito)
+```
+
+```{r}
+head(credito, 5)
+```
+
+```{r}
+summary(credito)
+```
+
+#### Acceder a elementos de un dataframae (columnas)
+
+**Columnas**
+Como los dataFrames son listas podemos seleccionar columnas con la misma notacion
+
+```{r}
+columna1 <- credito[[1]]
+str(columna1)
+```
+
+```{r}
+columna1 <- credito[1]
+
+```
+
+```{r}
+str(columna1)
+```
+
+En este caso ultimo caso como solo utilizamos `[]` estamos obteniendo una lista que contiene la columna (nombre y column).** Tibble** es un tipo de lista eficiente para guardas columnas, es un tipo de dataframe pero más eficiente
+
+```{r}
+genero <-  credito$Gender
+```
+
+Veamos los datos unicos de este vector
+
+```{r}
+unique(genero)
+```
+
+**filas**
+
+**Usando indices**
+
+Acá usamos una notación extendida de `[]`: `[,]`. El lado izquierdo de la coma es para introducir nombres o número de filas y el lado derecho las columnas
+una fila todas las columnas 
+
+```{r}
+a11 <- credito[1, 1]
+a11
+```
+
+```{r}
+a1 <- credito[1, 'Gender' ]
+a1
+```
+
+
+
+podemos obtener toda una fila
+
+```{r}
+a1 <- credito[1, ]
+a1
+```
+
+filas específicas 
+
+```{r}
+filas <- c(1, 3 ,10, 100 )
+credito[filas, ]
+```
+
+```{r}
+filas <- c(1, 3 ,10, 100 )
+credito[filas,c('Gender', 'Education') ]
+```
+
+**Ejercicios**
+
+A) De la base `credito` obtenga los siguiente subconjuntos de datos:
+- columna 1 y columna 3, todas las filas
+- columna 1 y columna 3, filas 1 y 6
+- todas las columnas, filas 1 a la 30
+- Columnas Self_Employed y Loan_Amount
+- Primera y ultima columna, filas 1 y 2. Recuerde la función `length`.
+
+
+**Usando operadores lógicos**
+
+Recordemos las operaciones booleanas `==` `&` y `|` (y/ó)
+
+Supongamos que A = 5 y B = 7
+
+- `==` nos permite evaluar si algo es falso o es verdadero.
+Por ejemplo A==5? (falso o verdadero)
+- A ==5 & B == 6?: falso
+- A ==5 | B == 6?: verdadero
+- A ==4 | B == 6?: Falso
+
+
+Lo mismo podemos hacer con las columnas de un dataframe. Lo que hacemos es tomar el nombre de un columna y decirle a R que vaya fila por fila revisando si tiene o no cierto valor.
+
+
+Veamos en filas tenemos genero 'Male'
+
+```{r}
+head(genero, 30)
+```
+
+
+```{r}
+condicion <- genero == 'Male'
+head(condicion, 30)
+```
+
+Podemos usar todo este vector de falsos y verdaderos para que nos devuelva las filas donde  se cumple la condición
+
+```{r}
+head(credito[condicion, ], 30)
+```
+
+**Nota** 
+Si tenemos un valor NA dentro de la variable sobre la que estamos evaluando una condición, R nos devolvera una fila llena de NAs en esa posición
+
+
+Más ejemplos 
+
+```{r}
+condicion1 <- credito$Married == 'Yes' 
+condicion2 <- credito$Education == 'Graduate'
+
+subconjunto <- credito[condicion1 & condicion2, ]
+```
+
+cuantos cumplen con esa condición? Podemos contar el número de filas 
+
+```{r}
+nrow(subconjunto)
+```
+
+Podemos hacer esa misma evalución así:
+
+
+```{r}
+nrow(credito[credito$Gender == 'Male' & credito$Education == 'Graduate',])
+```
+
+**ejercicio**
+
+Cuantas operaciones crediticias cumplen con las dos condiciones del ejemplo anterior que pidieron un credito menir a $5000?
+
+```{r eval=FALSE, include=FALSE}
+nrow(credito[credito$Gender == 'Male' & credito$Education == 'Graduate'
+               & credito$LoanAmount == 5000,])
+```
+
+```{r}
+nrow(credito[credito$Gender == 'Male' & credito$Education == 'Graduate'
+               & credito$LoanAmount < 5000, ])
+```
+
+
+#### Crear columnas 
+
+Para esto nos inventamos un nombre de columna y usamos la notación 
+
+`datos['nombre_nueva_columna'] <- funcion(datos[columna_a_operar])`
+
+`datos['nombre_nueva_columna'] <- datos[columnax] (operacion) datos[columnay]
+   
+
+```{r}
+#logaritmo del monto del crédito
+
+credito['log_monto_credito'] <-  log(credito$LoanAmount)
+
+credito['capacidad_credito'] <- credito$ApplicantIncome + credito$CoapplicantIncome
+
+glimpse(credito)
+```
+
+
+#### Introducción a Dplyr
+
+Dplyr es una librería de R que nos permite manipular data frames de una forma súper simple y eficiente. Su lógica se basa en verbos que ejecutan una acción común de manipulación de datos, devuelve otro data frame resultante sobre el cual podemos hacer más operaciones:
+
+Estas acciones son:
+
+- Seleccionar columnas: `select`
+- filtrar filas: `filter`
+- crear columnas: `mutate`
+- group: `agrupar`
+- resumir o crear agregaod de variables: `summarise`
+
+Estas son funciones y cada una tiene argumentos que vamos a ir viendo por casos
+
+Usa un operador especial que nos permite operar en cadena varios verbos: `%>%`
+
+Su lógica es 
+
+dataset `%>%` accion(dataset) `%>%` acction(dataset_1) `%>%` acction(dataset_2)...
+
+
+
+Ejemplo
+
+```{r}
+credito %>% mutate(capacidad_credito = CoapplicantIncome + ApplicantIncome) %>% 
+  select(Loan_ID, Gender, capacidad_credito) %>% head(30)
+```
+
+#### Filter 
+
+Este verbos nos permite evaluar expresiones y tomar solo las filas que cumplan con esto. Similar a lo que vimos antes, pero con mucho menos código (no tenemos que estar escribiendo  el nombre de la tabla de datos cada vez que ocupamos hacer un filtro)
+
+```{r}
+
+nrow(credito %>% filter(credito$Gender == 'Male' & credito$Education == 'Graduate'))
+
+
+```
+
+lo que es lo mismo 
+
+```{r}
+credito %>% filter(credito$Gender == 'Male' & credito$Education == 'Graduate') %>% nrow()
+```
+
+
+
+Otro ejemplo 
+
+```{r}
+credito %>% filter(credito$Gender == 'Male' & credito$Education == 'Graduate' | Self_Employed == 'Yes') %>% nrow()
+```
+
+**Ejercicio** 
+Por que hay más al agregar una condición?
+
+
+**Ejercicios**
+- Cuente el número de mujeres
+- Cuente el número de mujeres con autoempleo
+- Cuente el número de mujeres con autoempleo o el número de mujeres con educación `Graduate` (bachillerato universitario)
+
+
+#### Select
+
+```{r}
+credito %>% select(Loan_Amount_Term, Property_Area) %>% head()
+```
+
+
+```{r}
+credito %>% select(1:4)
+```
+
+#### Mutate 
+
+Esta función nos permite crear nuevas variables y agregarlas a la base de datos:
+
+```{r}
+credito %>% 
+  mutate(log_cred = log(LoanAmount),
+         media_credito = mean(LoanAmount, na.rm = T)) %>% 
+  select(Loan_ID, media_credito, log_cred) %>% 
+  head()
+  
+```
+
+Observe que la media es constante. Esto sucede porque `mutate` toma la media de la columna y LoanAmount (la media es un valor único para toda la serie) y tiene que agregarla como una columna.
+
+
